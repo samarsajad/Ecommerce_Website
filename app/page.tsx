@@ -122,7 +122,7 @@ export default function HomePage() {
 
   // Filtering Logic
   const filteredAndSortedProducts = useMemo(() => {
-    let products: Product[] = mockProducts.filter(p => 
+    const products: Product[] = mockProducts.filter(p => 
       (!selectedCategory || p.category === selectedCategory) &&
       (selectedBrands.length === 0 || selectedBrands.includes(p.brand)) &&
       (selectedColors.length === 0 || p.colors.some(color => selectedColors.includes(color))) &&
