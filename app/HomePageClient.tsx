@@ -248,10 +248,10 @@ export default function HomePageClient() {
               </div>
             )
           ) : (
-            <div className="text-center py-16 bg-white rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold">No products found</h3>
+            <div className="text-center py-16 bg-white ">
+              <h3 className="text-xl text-gray-500 font-semibold">No products found</h3>
               <p className="text-gray-500 mt-2">Try adjusting your filters.</p>
-              <button onClick={handleResetFilters} className="mt-4 px-4 py-2 bg-primary-blue text-white rounded">Reset Filters</button>
+              <button onClick={handleResetFilters} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Reset Filters</button>
             </div>
           )}
 
