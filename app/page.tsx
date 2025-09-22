@@ -1,21 +1,23 @@
 
 
-import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import HomePageClient from './HomePageClient';
 
 
-const HomePageClient = dynamic(
-  () => import('./HomePageClient'), 
-  { 
-    ssr: false,  
-    loading: () => (
-      <div className="flex justify-center items-center h-screen">
-        <h2 className="text-2xl font-semibold">🌀 Loading Products...</h2>
-      </div>
-    )
-  }
-);
+
+function LoadingFallback() {
+  return (
+    <div className="flex flex-col justify-center items-center h-screen">
+      
+      <h2 className="text-2xl font-semibold mt-6">Loading Products...</h2>
+    </div>
+  );
+}
 
 export default function HomePage() {
- 
-  return <HomePageClient />;
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <HomePageClient />
+    </Suspense>
+  );
 }
