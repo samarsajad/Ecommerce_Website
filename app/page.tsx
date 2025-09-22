@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import HomePageClient from './HomePage';
+import HomePageClient from './HomePageClient';
 
 function LoadingFallback() {
   return <h2>Loading...</h2>;
