@@ -70,7 +70,7 @@ export const Footer = () => {
           <div>
             <h3 className="font-bold text-gray-800 mb-4">Follow Us</h3>
             <p className="text-gray-600 text-sm mb-4">
-                Join us on social media for the latest updates and offers.
+                Join us on social media for the latest updates and offers
             </p>
             <div className="flex space-x-4">
               <Link href="#" className="text-blue-600 hover:text-primary-blue">
