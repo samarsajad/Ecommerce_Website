@@ -1,5 +1,3 @@
-// app/page.tsx
-
 import { Suspense } from 'react';
 import HomePageClient from './HomePage';
 
