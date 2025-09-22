@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ProductCard } from '@/components/ProductCard';
-import { Sidebar } from '@/components/SideBar';
+import { Sidebar } from '@/components/SideBar'; 
 import { Pagination } from '@/components/Pagination';
 import { ControlBar } from '@/components/ControlBar';
 import { mockProducts } from '@/data/products';
@@ -76,13 +76,16 @@ export default function HomePageClient() {
     updateParam('show', itemsPerPage !== DEFAULT_ITEMS_PER_PAGE ? String(itemsPerPage) : null);
     updateParam('price', (priceRange[0] !== DEFAULT_PRICE_RANGE[0] || priceRange[1] !== DEFAULT_PRICE_RANGE[1]) ? `${priceRange[0]}-${priceRange[1]}` : null);
     
-    router.replace(`${pathname}?${params.toString()}`);
+    // Only push to router if params have changed to avoid unnecessary re-renders
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`${pathname}?${params.toString()}`);
+    }
   }, [selectedCategory, selectedBrands, selectedColors, sortOption, currentPage, itemsPerPage, priceRange, router, pathname, searchParams]);
   
   const categoryCounts = useMemo(() => getCounts(mockProducts, 'category'), []);
   const brandCounts = useMemo(() => getCounts(mockProducts, 'brand'), []);
 
-  // Filter Handler
+  // Filter Handlers
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(prev => (prev === category ? '' : category));
     setCurrentPage(1);
@@ -122,7 +125,7 @@ export default function HomePageClient() {
 
   // Filtering Logic
   const filteredAndSortedProducts = useMemo(() => {
-    const products: Product[] = mockProducts.filter(p => 
+    let products: Product[] = mockProducts.filter(p => 
       (!selectedCategory || p.category === selectedCategory) &&
       (selectedBrands.length === 0 || selectedBrands.includes(p.brand)) &&
       (selectedColors.length === 0 || p.colors.some(color => selectedColors.includes(color))) &&
@@ -132,8 +135,13 @@ export default function HomePageClient() {
     const [sortBy, order] = sortOption.split('-');
     products.sort((a, b) => {
       let comparison = 0;
-      if (sortBy === 'price') comparison = a.discountPrice - b.discountPrice;
-      else if (sortBy === 'name') comparison = a.name.localeCompare(b.name);
+      if (sortBy === 'price') {
+        comparison = a.discountPrice - b.discountPrice;
+      } else if (sortBy === 'name') {
+        comparison = a.name.localeCompare(b.name);
+      } else if (sortBy === 'popularity') { 
+        comparison = a.rating - b.rating;
+      }
       return order === 'asc' ? comparison : -comparison;
     });
 
@@ -180,9 +188,7 @@ export default function HomePageClient() {
         
         {/* Mobile Sidebar (Drawer) */}
         {isSidebarOpen && (
-          
           <div className="lg:hidden fixed inset-0 z-40" onClick={() => setIsSidebarOpen(false)}>
-           
             <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-blue-50 p-4 overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="font-bold text-xl">Filters</h2>
@@ -208,7 +214,7 @@ export default function HomePageClient() {
 
         <div className="w-full">
           {/* Banner Section */}
-          <div className="bg-blue-600 text-white p-10 mb-8 flex items-center justify-between shadow-lg">
+          <div className="bg-blue-600 text-white p-10 rounded-lg mb-8 flex items-center justify-between shadow-lg">
             <div>
               <h1 className="text-3xl font-bold">Adidas Men Running</h1>
               <h2 className="text-6xl font-extrabold">Sneakers</h2>
@@ -216,6 +222,7 @@ export default function HomePageClient() {
               <button className="mt-6 font-bold text-white tracking-wider border-b-2 border-white pb-1">SHOP NOW</button>
             </div>
             <div className="w-1/4">
+              
               <img src="/products/item2.webp" alt="Featured Sneaker" className="transform -rotate-15 transition-transform hover:scale-110" />
             </div>
           </div>
